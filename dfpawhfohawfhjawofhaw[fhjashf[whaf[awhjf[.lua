@@ -171,7 +171,6 @@ local function CreateESP(part)
                 end
             end
         end
-        end
     end,
     remove = function()
         box:Remove()
