@@ -1,4 +1,4 @@
-        local ESP = {}
+local ESP = {}
 
 ESP.settings = {
     box = {
@@ -138,24 +138,26 @@ local function CreateESP(part)
                             local maxHealth = humanoid.MaxHealth
                             local currentHealth = humanoid.Health
 
-                            if maxHealth > 0 then
+                            if maxHealth > 0 and healthTextSettings.enabled then
                                 local healthPercentage = currentHealth / maxHealth
                                 healthText.Text = string.format("%d%%", healthPercentage * 100)
                                 healthText.Position = headScreenPosition + Vector2.new(0, (height / 2) + 16)
+                                healthText.Visible = true
 
-                                -- Ensure that health bar is always updated regardless of health text visibility
-                                if healthBarSettings.enabled then
-                                    healthBar.Color = healthBarSettings.color
-                                    healthBar.Size = Vector2.new(5, height * healthPercentage)
-                                    healthBar.Position = headScreenPosition + Vector2.new(width / 2 + 8, -height / 2)
-                                    healthBar.Visible = textSettings.enabled  -- Update health bar visibility based on health text visibility
-                                    healthBarBackground.Size = Vector2.new(5, height)
-                                    healthBarBackground.Position = headScreenPosition + Vector2.new(width / 2 + 8, -height / 2)
-                                    healthBarBackground.Visible = textSettings.enabled  -- Update health bar background visibility based on health text visibility
-                                else
-                                    healthBar.Visible = false
-                                    healthBarBackground.Visible = false
-                                end
+                                healthBarBackground.Size = Vector2.new(5, height)
+                                healthBarBackground.Position = headScreenPosition + Vector2.new(width / 2 + 8, -height / 2)
+                                healthBarBackground.Visible = healthBarSettings.enabled
+
+                                local gradientIndex = math.floor(healthPercentage * (#gradientColors - 1)) + 1
+                                local gradientColor = gradientColors[gradientIndex]
+                                healthBar.Color = gradientColor
+                                healthBar.Size = Vector2.new(5, height * healthPercentage)
+                                healthBar.Position = headScreenPosition + Vector2.new(width / 2 + 8, -height / 2)
+                                healthBar.Visible = healthBarSettings.enabled
+                            else
+                                healthText.Visible = false
+                                healthBar.Visible = false
+                                healthBarBackground.Visible = false
                             end
                         end
                     else
@@ -168,16 +170,18 @@ local function CreateESP(part)
                     end
                 end
             end
-        end,
-        remove= function()
-            box:Remove()
-            text:Remove()
-            distancetext:Remove()
-            healthText:Remove()
-            healthBar:Remove()
-            healthBarBackground:Remove()
         end
-    }
+        end
+    end,
+    remove = function()
+        box:Remove()
+        text:Remove()
+        distancetext:Remove()
+        healthText:Remove()
+        healthBar:Remove()
+        healthBarBackground:Remove()
+    end
+}
 end
 
 local function updateESP()
