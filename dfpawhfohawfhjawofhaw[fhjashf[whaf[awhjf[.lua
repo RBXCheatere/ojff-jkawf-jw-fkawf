@@ -154,12 +154,7 @@ local function CreateESP(part)
                                 healthBar.Size = Vector2.new(5, height * healthPercentage)
                                 healthBar.Position = headScreenPosition + Vector2.new(width / 2 + 8, -height / 2)
                                 healthBar.Visible = healthBarSettings.enabled
-                            else
-                                healthText.Visible = false
-                                healthBar.Visible = false
-                                healthBarBackground.Visible = false
-                            end
-                        end
+                       
                     else
                         box.Visible = false
                         text.Visible = false
